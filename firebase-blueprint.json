@@ -1,0 +1,122 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Information about an employee or administrator.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string", "format": "uri" },
+        "role": { "type": "string", "enum": ["admin", "user"], "description": "Access level" },
+        "department": { "type": "string" },
+        "position": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Request": {
+      "title": "Leave Request",
+      "description": "An application for leave or an explanation for attendance issues.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "type": { "type": "string", "description": "e.g., Annual Leave, Sick Leave, Explanation" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "approverId": { "type": "string" },
+        "approverName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "startDate", "endDate", "status"]
+    },
+    "Attendance": {
+      "title": "Attendance Record",
+      "description": "Daily check-in and check-out logs.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "checkIn": { "type": "string", "format": "date-time" },
+        "checkOut": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["normal", "late", "early_leave", "absent"] },
+        "penalty": { "type": "number" }
+      },
+      "required": ["userId", "date"]
+    },
+    "Payroll": {
+      "title": "Payroll Record",
+      "description": "Monthly salary calculation for an employee.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "month": { "type": "string", "description": "YYYY-MM" },
+        "baseSalary": { "type": "number" },
+        "bonus": { "type": "number" },
+        "penalty": { "type": "number" },
+        "total": { "type": "number" },
+        "status": { "type": "string", "enum": ["draft", "locked", "paid"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "month", "total", "status"]
+    },
+    "Event": {
+      "title": "Company Event",
+      "description": "Internal events, workshops, or public holidays.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" },
+        "location": { "type": "string" },
+        "type": { "type": "string", "enum": ["event", "holiday", "workshop"] },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["title", "date", "type"]
+    },
+    "Setting": {
+      "title": "System Setting",
+      "description": "Global configuration for the HR system.",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "value": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["key", "value"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "Employee profile documents."
+    },
+    "/requests/{requestId}": {
+      "schema": "Request",
+      "description": "Leave and explanation requests."
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "Attendance",
+      "description": "Daily attendance logs."
+    },
+    "/payroll/{payrollId}": {
+      "schema": "Payroll",
+      "description": "Monthly payroll records."
+    },
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "Company events and holidays."
+    },
+    "/settings/{settingId}": {
+      "schema": "Setting",
+      "description": "Global system configurations."
+    }
+  }
+}

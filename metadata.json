@@ -1,0 +1,5 @@
+{
+  "name": "Precision & Flow",
+  "description": "A premium HR and attendance management system with a fluid, editorial design.",
+  "requestFramePermissions": ["geolocation"]
+}
